@@ -14,11 +14,9 @@ use rocket_contrib::json::{Json, JsonValue};
 use serde_json::json;
 use crate::schema::car::dsl::car;
 
-
 // connection to postgres 
 pub fn establish_connection() -> PgConnection {
     dotenv().ok();
-
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     PgConnection::establish(&database_url)
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
@@ -80,7 +78,7 @@ pub fn update_car(id: i32, update_data: Json<UpdateCar>) ->Json<JsonValue>
     let _updated_car = diesel::update(car.find(id))
         .set(&update_data.into_inner())
         .execute(&connection)
-        .expect("Failed to update student");
+        .expect("Failed to update car");
 
     // Return a JSON response indicating success
     Json(JsonValue::from(json!({
